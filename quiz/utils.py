@@ -1,6 +1,8 @@
 import os
+from pathlib import Path
 
-DATA_FILE = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'questions.txt')
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_FILE = os.path.join(BASE_DIR, 'data', 'questions.txt')
 
 def load_questions():
     questions = []
@@ -20,6 +22,8 @@ def load_questions():
     return questions
 
 def save_questions(questions):
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         for q in questions:
             f.write(f"{q['text']}|{q['option1']}|{q['option2']}|{q['correct']}\n")
