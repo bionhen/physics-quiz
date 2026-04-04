@@ -1,0 +1,9 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<h2>📝 Ответьте на вопросы</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Проверить</button>
+</form>
+{% endblock %}

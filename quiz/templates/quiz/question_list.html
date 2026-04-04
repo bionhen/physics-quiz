@@ -1,0 +1,11 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<h2>📋 Все вопросы</h2>
+<ul>
+    {% for q in questions %}
+        <li><strong>{{ q.text }}</strong><br>1) {{ q.option1 }} | 2) {{ q.option2 }}<br><br></li>
+    {% empty %}
+        <li>Вопросов пока нет. <a href="{% url 'add_question' %}">Добавьте первый!</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

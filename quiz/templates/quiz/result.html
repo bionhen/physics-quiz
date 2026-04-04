@@ -1,0 +1,6 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<h2>🎉 Результат</h2>
+<p>Вы набрали <strong>{{ score }}</strong> из <strong>{{ total }}</strong>.</p>
+<a href="{% url 'quiz' %}">Пройти ещё раз</a>
+{% endblock %}
