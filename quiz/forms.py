@@ -25,3 +25,17 @@ class QuizAnswerForm(forms.Form):
                 label=q['text'],
                 widget=forms.RadioSelect
             )
+            
+class LoginForm(forms.Form):
+    password = forms.CharField(
+        label="Пароль преподавателя",
+        widget=forms.PasswordInput,
+        help_text="Введите пароль для доступа к редактированию"
+    )
+    
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        from .auth import check_password
+        if not check_password(password):
+            raise forms.ValidationError("Неверный пароль!")
+        return password

@@ -1,11 +1,32 @@
 {% extends 'quiz/base.html' %}
 {% block content %}
-<h2>📋 Все вопросы</h2>
-<ul>
+<h2>📋 Список вопросов</h2>
+
+{% if is_teacher %}
+    <div style="background: #e8f5e9; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+        ✅ Вы вошли как преподаватель — видны правильные ответы
+    </div>
+{% endif %}
+
+{% if questions %}
     {% for q in questions %}
-        <li><strong>{{ q.text }}</strong><br>1) {{ q.option1 }} | 2) {{ q.option2 }}<br><br></li>
-    {% empty %}
-        <li>Вопросов пока нет. <a href="{% url 'add_question' %}">Добавьте первый!</a></li>
+        <div style="border:1px solid #ccc; margin:10px 0; padding:10px;">
+            <strong>Вопрос {{ q.id }}:</strong> {{ q.text }}<br>
+            <strong>Вариант 1:</strong> {{ q.option1 }}<br>
+            <strong>Вариант 2:</strong> {{ q.option2 }}<br>
+            
+            {% if show_correct %}
+                <div style="background: #e8f5e9; margin-top: 5px; padding: 5px;">
+                    ✅ <strong>Правильный ответ:</strong> 
+                    {% if q.correct == 'option1' %}{{ q.option1 }}{% else %}{{ q.option2 }}{% endif %}
+                </div>
+            {% endif %}
+        </div>
     {% endfor %}
-</ul>
+{% else %}
+    <p>Вопросов пока нет.</p>
+    {% if is_teacher %}
+        <a href="{% url 'add_question' %}">Добавьте первый вопрос!</a>
+    {% endif %}
+{% endif %}
 {% endblock %}

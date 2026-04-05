@@ -1,0 +1,20 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<h2>🔐 Вход для преподавателя</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Войти</button>
+</form>
+
+<p style="margin-top: 20px;">
+    <a href="{% url 'home' %}">← Вернуться на главную</a>
+</p>
+{% endblock %}

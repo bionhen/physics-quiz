@@ -5,17 +5,30 @@
     <style>
         body { font-family: Arial; margin: 40px; background: #f0f7ff; }
         nav a { margin-right: 15px; text-decoration: none; color: #0066cc; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+        .container { max-width: 800px; margin: 20px auto 0 auto; background: white; padding: 20px; border-radius: 10px; }
         .error { color: red; font-size: 0.9em; }
         button { background: #0066cc; color: white; padding: 8px 16px; border: none; border-radius: 5px; }
     </style>
 </head>
 <body>
     <nav>
-        <a href="{% url 'home' %}">Главная</a>
-        <a href="{% url 'question_list' %}">Список вопросов</a>
-        <a href="{% url 'add_question' %}">Добавить вопрос</a>
-        <a href="{% url 'quiz' %}">Пройти квиз</a>
+    <a href="{% url 'home' %}">Главная</a>
+    
+    <!-- Список вопросов видят только преподаватели -->
+    {% if is_teacher %}
+        <a href="{% url 'question_list' %}">📋 Список вопросов</a>
+        <a href="{% url 'add_question' %}">➕ Добавить вопрос</a>
+    {% endif %}
+    
+    <!-- Квиз видят все -->
+    <a href="{% url 'quiz' %}">📝 Пройти квиз</a>
+    
+    <!-- Вход/выход -->
+    {% if is_teacher %}
+        <a href="{% url 'teacher_logout' %}">🚪 Выйти</a>
+    {% else %}
+        <a href="{% url 'teacher_login' %}">🔐 Вход для преподавателя</a>
+    {% endif %}
     </nav>
     <div class="container">
         {% block content %}{% endblock %}

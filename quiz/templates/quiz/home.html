@@ -1,5 +1,26 @@
 {% extends 'quiz/base.html' %}
 {% block content %}
 <h1>🧠 Квиз по физике</h1>
-<p>Узнайте свой уровень в задачах по физике!</p>
+
+{% if is_teacher %}
+    <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+        🎓 Вы вошли как <strong>преподаватель</strong><br>
+        Вам доступно:
+        <ul>
+            <li>Добавление и редактирование вопросов</li>
+            <li>Просмотр правильных ответов</li>
+        </ul>
+    </div>
+{% else %}
+    <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+        👨‍🎓 Вы вошли как <strong>ученик</strong><br>
+        Вам доступно:
+        <ul>
+            <li>Просмотр списка вопросов</li>
+            <li>Прохождение квиза</li>
+        </ul>
+    </div>
+{% endif %}
+
+<p>Проверьте свои знания по физике!</p>
 {% endblock %}
