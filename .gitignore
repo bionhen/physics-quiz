@@ -18,7 +18,5 @@ settings_local.py
 .vscode/
 .history/
 
-data/questions.txt
-
 .DS_Store
 Thumbs.db
