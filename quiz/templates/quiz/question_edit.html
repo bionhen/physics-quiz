@@ -1,0 +1,55 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<h2>✏️ Редактирование вопроса #{{ question_id }}</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 15px;">
+        <label for="id_text">Вопрос:</label>
+        {{ form.text }}
+        {% if form.text.errors %}
+            <div style="color: red;">{{ form.text.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label for="id_option1">Вариант 1:</label>
+        {{ form.option1 }}
+        {% if form.option1.errors %}
+            <div style="color: red;">{{ form.option1.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label for="id_option2">Вариант 2:</label>
+        {{ form.option2 }}
+        {% if form.option2.errors %}
+            <div style="color: red;">{{ form.option2.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label>Правильный ответ:</label>
+        {{ form.correct }}
+        {% if form.correct.errors %}
+            <div style="color: red;">{{ form.correct.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <button type="submit" style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+        💾 Сохранить изменения
+    </button>
+    <a href="{% url 'question_list' %}" style="background: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">
+        Отмена
+    </a>
+</form>
+{% endblock %}

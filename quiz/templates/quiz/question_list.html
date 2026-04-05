@@ -1,32 +1,64 @@
 {% extends 'quiz/base.html' %}
 {% block content %}
-<h2>📋 Список вопросов</h2>
+<h2>📋 Управление вопросами</h2>
 
 {% if is_teacher %}
     <div style="background: #e8f5e9; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-        ✅ Вы вошли как преподаватель — видны правильные ответы
+        ✅ Вы вошли как преподаватель — доступно редактирование и удаление
     </div>
+{% endif %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+            {{ message }}
+        </div>
+    {% endfor %}
 {% endif %}
 
 {% if questions %}
     {% for q in questions %}
-        <div style="border:1px solid #ccc; margin:10px 0; padding:10px;">
-            <strong>Вопрос {{ q.id }}:</strong> {{ q.text }}<br>
-            <strong>Вариант 1:</strong> {{ q.option1 }}<br>
-            <strong>Вариант 2:</strong> {{ q.option2 }}<br>
-            
-            {% if show_correct %}
-                <div style="background: #e8f5e9; margin-top: 5px; padding: 5px;">
-                    ✅ <strong>Правильный ответ:</strong> 
-                    {% if q.correct == 'option1' %}{{ q.option1 }}{% else %}{{ q.option2 }}{% endif %}
+        <div style="border:1px solid #ccc; margin:10px 0; padding:10px; border-radius: 5px;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                    <strong>Вопрос {{ q.id }}:</strong> {{ q.text }}<br>
+                    <strong>Вариант 1:</strong> {{ q.option1 }}<br>
+                    <strong>Вариант 2:</strong> {{ q.option2 }}<br>
+                    
+                    {% if show_correct %}
+                        <div style="background: #e8f5e9; margin-top: 5px; padding: 5px; border-radius: 3px;">
+                            ✅ <strong>Правильный ответ:</strong> 
+                            {% if q.correct == 'option1' %}{{ q.option1 }}{% else %}{{ q.option2 }}{% endif %}
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
+                
+                {% if is_teacher %}
+                    <div style="margin-left: 15px;">
+                        <a href="{% url 'question_edit' q.id %}" 
+                           style="background: #ffc107; color: #333; padding: 5px 10px; text-decoration: none; border-radius: 3px; margin-right: 5px; display: inline-block;">
+                            ✏️ Редактировать
+                        </a>
+                        <a href="{% url 'question_delete' q.id %}" 
+                           style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; display: inline-block;"
+                           onclick="return confirm('Вы уверены, что хотите удалить этот вопрос?');">
+                            🗑️ Удалить
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
 {% else %}
     <p>Вопросов пока нет.</p>
-    {% if is_teacher %}
-        <a href="{% url 'add_question' %}">Добавьте первый вопрос!</a>
-    {% endif %}
+    <a href="{% url 'add_question' %}">Добавьте первый вопрос!</a>
 {% endif %}
-{% endblock %}
+
+{% if is_teacher %}
+    <div style="margin-top: 20px;">
+        <a href="{% url 'add_question' %}" style="background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
+            + Добавить новый вопрос
+        </a>
+    </div>
+{% endif %}
+{% endblock %}  
