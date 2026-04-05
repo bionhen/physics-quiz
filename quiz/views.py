@@ -7,24 +7,18 @@ from .decorators import teacher_required
 def home(request):
     return render(request, 'quiz/home.html')
 
+@teacher_required
 def question_list(request):
     # Только для преподавателей
-    if not is_teacher(request):
-        messages.error(request, "Доступ запрещён. Эта страница только для преподавателей.")
-        return redirect('home')
     
     questions = load_questions()
     return render(request, 'quiz/question_list.html', {
         'questions': questions,
         'show_correct': True,  # Преподаватель всегда видит ответы
-        'is_teacher': True
     })
 
+@teacher_required
 def add_question(request):
-    # Проверка: только преподаватель
-    if not is_teacher(request):
-        messages.error(request, "Доступ только для преподавателей!")
-        return redirect('teacher_login')
     
     if request.method == 'POST':
         form = QuestionForm(request.POST)
@@ -65,12 +59,17 @@ def quiz_view(request):
 
 def teacher_login(request):
     """Страница входа для преподавателя"""
+    # Если уже авторизован — редирект
+    if request.session.get('is_teacher', False):
+        messages.info(request, "Вы уже авторизованы как преподаватель")
+        return redirect('question_list')
+    
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             request.session['is_teacher'] = True
             messages.success(request, "Добро пожаловать, преподаватель!")
-            return redirect('add_question')
+            return redirect('question_list')
     else:
         form = LoginForm()
     return render(request, 'quiz/teacher_login.html', {'form': form})
@@ -82,9 +81,6 @@ def teacher_logout(request):
         messages.info(request, "Вы вышли из режима преподавателя")
     return redirect('home')
 
-def is_teacher(request):
-    """Проверка, авторизован ли преподаватель"""
-    return request.session.get('is_teacher', False)
 
 @teacher_required
 def question_edit(request, q_id):
